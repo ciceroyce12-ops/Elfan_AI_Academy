@@ -35,11 +35,11 @@
                 top: 50%;
                 left: 50%;
                 width: 100vw;
-                height: 177.78vw; /* Maintains 9:16 aspect ratio */
+                height: 177.78vw;
                 min-height: 100vh;
                 min-width: 56.25vh;
                 transform: translate(-50%, -50%);
-                pointer-events: none; /* Allows clicks to pass through to the page */
+                pointer-events: none;
             }
 
             .video-overlay {
@@ -48,7 +48,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.4); /* Dark overlay to keep text readable */
+                background: rgba(0, 0, 0, 0.4);
                 z-index: -1;
             }
 
@@ -118,9 +118,9 @@
         </style>
     </head>
     <body>
-        <!-- YouTube Short Background Embed with Audio Enabled & Looping -->
+        <!-- YouTube Background Embed set to Muted for Autoplay Compliance -->
         <div class="bg-video">
-            <iframe src="https://www.youtube.com/embed/fg6JCIs9_g4?autoplay=1&mute=0&loop=1&playlist=fg6JCIs9_g4&controls=0&disablekb=1&modestbranding=1&playsinline=1" 
+            <iframe src="https://www.youtube.com/embed/fg6JCIs9_g4?autoplay=1&mute=1&loop=1&playlist=fg6JCIs9_g4&controls=0&disablekb=1&modestbranding=1&playsinline=1" 
                     title="YouTube background video" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
