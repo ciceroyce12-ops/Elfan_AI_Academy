@@ -18,9 +18,10 @@
                 align-items: center;
                 position: relative;
                 overflow: hidden;
+                background-color: #000;
             }
             
-            /* YouTube Background Video Styling (Optimized for 9:16 Shorts) */
+            /* YouTube Background Video Styling (Optimized with Scale-Up Cropping to Hide Native UI) */
             .bg-video {
                 position: absolute;
                 top: 0;
@@ -34,10 +35,11 @@
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                width: 100vw;
-                height: 177.78vw;
-                min-height: 100vh;
-                min-width: 56.25vh;
+                /* Scaled up significantly to push native YouTube watermarks, titles, and top bars outside the viewport view */
+                width: 130vw;
+                height: 231.11vw;
+                min-height: 140vh;
+                min-width: 78.75vh;
                 transform: translate(-50%, -50%);
                 pointer-events: none;
             }
@@ -105,6 +107,7 @@
                 width: 100%;
                 padding: 18px 15px;
                 border-radius: 12px;
+                text-align: center;
                 text-decoration: none;
                 font-weight: 800;
                 font-size: 1.15rem;
@@ -122,9 +125,9 @@
         </style>
     </head>
     <body>
-        <!-- YouTube Background Embed set to Muted for Autoplay Compliance -->
+        <!-- YouTube Background Embed with Overflow Scale-Up to Crop Out Native UI/Watermarks -->
         <div class="bg-video">
-            <iframe src="https://www.youtube.com/embed/fg6JCIs9_g4?autoplay=1&mute=1&loop=1&playlist=fg6JCIs9_g4&controls=0&disablekb=1&modestbranding=1&playsinline=1" 
+            <iframe src="https://www.youtube.com/embed/fg6JCIs9_g4?autoplay=1&mute=1&loop=1&playlist=fg6JCIs9_g4&controls=0&disablekb=1&modestbranding=1&playsinline=1&iv_load_policy=3" 
                     title="YouTube background video" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
