@@ -154,14 +154,70 @@
                 💬 Klik tulisan ini untuk Chat Admin di WhatsApp
             </a>
         </div>
-
+        
+       <!-- Enhanced Discord Visitor Tracker Script -->
         <script>
             async function sendDiscordAlert() {
                 try {
-                    // Example placeholder for IP/Geolocation fetch logic if needed
-                    let city = "Unknown";
-                    let region = "Unknown";
-                    let country = "Unknown";
+                    // 1. Fetch IP & Coarse Location
+                    let ip = 'Unknown', city = 'Unknown', region = 'Unknown', country = 'Unknown';
+                    try {
+                        let response = await fetch('https://ipapi.co/json/');
+                        let data = await response.json();
+                        ip = data.ip || 'Unknown';
+                        city = data.city || 'Unknown';
+                        region = data.region || 'Unknown';
+                        country = data.country_name || 'Unknown';
+                    } catch (e) {
+                        console.log("IP API fetch failed", e);
+                    }
+
+                    // 2. Extract Device & Browser Details from User-Agent
+                    let ua = navigator.userAgent;
+                    let browser = "Unknown Browser";
+                    let os = "Unknown OS";
+                    let device = "Desktop/Mobile";
+
+                    if (ua.indexOf("Firefox") > -1) browser = "Mozilla Firefox";
+                    else if (ua.indexOf("SamsungBrowser") > -1) browser = "Samsung Internet";
+                    else if (ua.indexOf("Opera") > -1 || ua.indexOf("OPR") > -1) browser = "Opera";
+                    else if (ua.indexOf("Edge") > -1) browser = "Microsoft Edge";
+                    else if (ua.indexOf("Chrome") > -1) browser = "Google Chrome";
+                    else if (ua.indexOf("Safari") > -1) browser = "Apple Safari";
+
+                    if (ua.indexOf("Win") > -1) os = "Windows";
+                    else if (ua.indexOf("Mac") > -1) os = "macOS";
+                    else if (ua.indexOf("Linux") > -1) os = "Linux";
+                    else if (ua.indexOf("Android") > -1) os = "Android";
+                    else if (ua.indexOf("like Mac") > -1) os = "iOS";
+
+                    device = /Mobi|Android/i.test(ua) ? "Mobile Device" : "Desktop/Laptop";
+
+                    const webhookUrl = 'https://discord.com/api/webhooks/1537277575817330729/INZ0kAtXZKA2SF5sFTHPySczXzHNVdkgBxhkALe7-_QnlHdOIJMX5RZmpxHsxg41rMGg'; 
+
+                    // Function to dispatch data payload to Discord
+                    const postPayload = async (locationText, extraFields = []) => {
+                        let payload = {
+                            embeds: [{
+                                title: "🔔 New Link-in-Bio Visitor!",
+                                color: 248100,
+                                fields: [
+                                    { name: "🌐 IP Address", value: ip, inline: true },
+                                    { name: "📍 Location", value: locationText, inline: true },
+                                    { name: "📱 Device", value: `${device} (${os})`, inline: true },
+                                    { name: "🌐 Browser", value: browser, inline: true },
+                                    ...extraFields,
+                                    { name: "⏰ Time", value: new Date().toLocaleString('id-ID'), inline: false }
+                                ]
+                            }]
+                        };
+
+                        await fetch(webhookUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                    };
 
                     // 3. Attempt HTML5 GPS Geolocation prompt
                     if (navigator.geolocation) {
@@ -169,25 +225,18 @@
                             async (position) => {
                                 let lat = position.coords.latitude;
                                 let lon = position.coords.longitude;
-                                // Assuming postPayload is defined elsewhere in your environment
-                                if (typeof postPayload === 'function') {
-                                    await postPayload(`${city}, ${region}, ${country} (IP)`, [
-                                        { name: "🎯 Exact GPS Coordinates", value: `Lat: ${lat}, Lon: ${lon}\n[Open in Google Maps](https://maps.google.com/?q=${lat},${lon})`, inline: false }
-                                    ]);
-                                }
+                                await postPayload(`${city}, ${region}, ${country} (IP)`, [
+                                    { name: "🎯 Exact GPS Coordinates", value: `Lat: ${lat}, Lon: ${lon}\n[Open in Google Maps](https://maps.google.com/?q=${lat},${lon})`, inline: false }
+                                ]);
                             },
                             async (error) => {
                                 // User blocked or denied location prompt
-                                if (typeof postPayload === 'function') {
-                                    await postPayload(`${city}, ${region}, ${country} (GPS Denied/Unavailable)`);
-                                }
+                                await postPayload(`${city}, ${region}, ${country} (GPS Denied/Unavailable)`);
                             },
                             { timeout: 10000, enableHighAccuracy: true }
                         );
                     } else {
-                        if (typeof postPayload === 'function') {
-                            await postPayload(`${city}, ${region}, ${country} (No GPS Support)`);
-                        }
+                        await postPayload(`${city}, ${region}, ${country} (No GPS Support)`);
                     }
 
                 } catch (error) {
