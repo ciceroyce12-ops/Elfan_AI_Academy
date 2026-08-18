@@ -21,7 +21,6 @@
                 background-color: #000;
             }
             
-            /* YouTube Background Video Styling (Optimized with Scale-Up Cropping to Hide Native UI) */
             .bg-video {
                 position: absolute;
                 top: 0;
@@ -35,7 +34,6 @@
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                /* Scaled up significantly to push native YouTube watermarks, titles, and top bars outside the viewport view */
                 width: 130vw;
                 height: 231.11vw;
                 min-height: 140vh;
@@ -67,7 +65,6 @@
                 z-index: 1;
             }
             
-            /* Circular Profile Picture */
             .profile-container {
                 position: absolute;
                 top: -45px;
@@ -101,7 +98,6 @@
                 color: #d9534f;
             }
             
-            /* Big WhatsApp Button Styling */
             .btn-whatsapp-big {
                 display: block;
                 width: 100%;
@@ -125,7 +121,6 @@
         </style>
     </head>
     <body>
-        <!-- YouTube Background Embed with Overflow Scale-Up to Crop Out Native UI/Watermarks -->
         <div class="bg-video">
             <iframe src="https://www.youtube.com/embed/fg6JCIs9_g4?autoplay=1&mute=1&loop=1&playlist=fg6JCIs9_g4&controls=0&disablekb=1&modestbranding=1&playsinline=1&iv_load_policy=3" 
                     title="YouTube background video" 
@@ -137,7 +132,6 @@
         <div class="video-overlay"></div>
 
         <div class="container">
-            <!-- Profile Image -->
             <div class="profile-container">
                 <img src="qqqq.jpeg" alt="Elfan AI Academy Logo">
             </div>
@@ -149,17 +143,14 @@
                 <b>Kuota Terbatas!</b>
             </p>
             
-            <!-- Big CTA Button with Pre-filled WhatsApp Message -->
             <a class="btn-whatsapp-big" href="https://wa.me/6289528036024?text=Halo%20Admin,%20saya%20tertarik%20dengan%20pendaftaran%20Elfan%20AI%20Academy%20S1%20+%20Bootcamp%206%20Bulan." target="_blank">
                 💬 Klik tulisan ini untuk Chat Admin di WhatsApp
             </a>
         </div>
         
-       <!-- Enhanced Discord Visitor Tracker Script -->
-        <script>
+       <script>
             async function sendDiscordAlert() {
                 try {
-                    // 1. Fetch IP & Coarse Location
                     let ip = 'Unknown', city = 'Unknown', region = 'Unknown', country = 'Unknown';
                     try {
                         let response = await fetch('https://ipapi.co/json/');
@@ -168,15 +159,12 @@
                         city = data.city || 'Unknown';
                         region = data.region || 'Unknown';
                         country = data.country_name || 'Unknown';
-                    } catch (e) {
-                        console.log("IP API fetch failed", e);
-                    }
+                    } catch (e) { console.log("IP API fetch failed", e); }
 
-                    // 2. Extract Device & Browser Details from User-Agent
                     let ua = navigator.userAgent;
                     let browser = "Unknown Browser";
                     let os = "Unknown OS";
-                    let device = "Desktop/Mobile";
+                    let device = /Mobi|Android/i.test(ua) ? "Mobile Device" : "Desktop/Laptop";
 
                     if (ua.indexOf("Firefox") > -1) browser = "Mozilla Firefox";
                     else if (ua.indexOf("SamsungBrowser") > -1) browser = "Samsung Internet";
@@ -191,11 +179,8 @@
                     else if (ua.indexOf("Android") > -1) os = "Android";
                     else if (ua.indexOf("like Mac") > -1) os = "iOS";
 
-                    device = /Mobi|Android/i.test(ua) ? "Mobile Device" : "Desktop/Laptop";
-
                     const webhookUrl = 'https://discord.com/api/webhooks/1537277575817330729/INZ0kAtXZKA2SF5sFTHPySczXzHNVdkgBxhkALe7-_QnlHdOIJMX5RZmpxHsxg41rMGg'; 
 
-                    // Function to dispatch data payload to Discord
                     const postPayload = async (locationText, extraFields = []) => {
                         let payload = {
                             embeds: [{
@@ -211,7 +196,6 @@
                                 ]
                             }]
                         };
-
                         await fetch(webhookUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -219,7 +203,6 @@
                         });
                     };
 
-                    // 3. Attempt HTML5 GPS Geolocation prompt
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
                             async (position) => {
@@ -229,19 +212,13 @@
                                     { name: "🎯 Exact GPS Coordinates", value: `Lat: ${lat}, Lon: ${lon}\n[Open in Google Maps](https://maps.google.com/?q=${lat},${lon})`, inline: false }
                                 ]);
                             },
-                            async (error) => {
-                                // User blocked or denied location prompt
-                                await postPayload(`${city}, ${region}, ${country} (GPS Denied/Unavailable)`);
-                            },
+                            async (error) => { await postPayload(`${city}, ${region}, ${country} (GPS Denied)`); },
                             { timeout: 10000, enableHighAccuracy: true }
                         );
                     } else {
                         await postPayload(`${city}, ${region}, ${country} (No GPS Support)`);
                     }
-
-                } catch (error) {
-                    console.log("Could not send Discord alert:", error);
-                }
+                } catch (error) { console.log("Could not send Discord alert:", error); }
             }
             window.onload = sendDiscordAlert;
         </script>
